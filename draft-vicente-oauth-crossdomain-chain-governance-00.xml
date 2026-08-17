@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp "&#160;">
+]>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+     category="info"
+     docName="draft-vicente-oauth-crossdomain-chain-governance-00"
+     ipr="trust200902"
+     submissionType="IETF"
+     xml:lang="en"
+     version="3">
+
+  <front>
+    <title abbrev="Cross-Domain OAuth Chain Gov">Cross-Domain OAuth Chain Governance</title>
+    <seriesInfo name="Internet-Draft" value="draft-vicente-oauth-crossdomain-chain-governance-00"/>
+
+    <author initials="B." surname="Vicente" fullname="Brian Vicente">
+      <organization>Sanctum SecOps LLC</organization>
+      <address>
+        <postal><city>Pine City</city><region>NY</region><country>United States of America</country></postal>
+        <email>brian@sso-labs.com</email>
+        <uri>https://orcid.org/0009-0006-6395-5308</uri>
+      </address>
+    </author>
+
+    <date year="2026" month="August" day="16"/>
+    <area>Security</area>
+    <workgroup>OAuth</workgroup>
+    <keyword>oauth</keyword>
+    <keyword>cross-domain</keyword>
+    <keyword>delegation</keyword>
+    <keyword>chain</keyword>
+    <keyword>governance</keyword>
+    <keyword>revocation</keyword>
+
+    <abstract>
+      <t>This document defines a governance framework for OAuth 2.0 delegation chains that span administrative domains. It specifies how a chain of delegated authorizations is represented, how each link is cryptographically bound to its predecessor and to the domain boundary it crosses, and how governance controls (revocation, scope narrowing, and expiry propagation) are enforced across the entire chain rather than per-link in isolation.</t>
+      <t>The framework addresses the trust and accountability gaps that arise when an authorization delegated in one domain is exercised in another, enabling verifiable, end-to-end governance of multi-hop delegated access.</t>
+    </abstract>
+
+    <note title="Source and Archival" removeInRFC="true">
+      <t>
+        Source for this draft is maintained at
+        <eref target="https://github.com/Sanc-Admin/oauth-crossdomain-chain-governance">https://github.com/Sanc-Admin/oauth-crossdomain-chain-governance</eref>.
+        Author ORCID iD:
+        <eref target="https://orcid.org/0009-0006-6395-5308">https://orcid.org/0009-0006-6395-5308</eref>.
+        Reference implementation and JSON evidence: CygnetLib
+        (<eref target="https://github.com/sanctumsecopsmssp/CygnetLib">https://github.com/sanctumsecopsmssp/CygnetLib</eref>).
+      </t>
+    </note>
+
+    <note title="IPR Considerations" removeInRFC="true">
+      <t>
+        Sanctum IP Co (a Delaware corporation, assignee of Sanctum SecOps LLC) holds or
+        intends to file patent or other intellectual property rights covering subject matter described in this
+        document. By posting this Internet-Draft, the author submits to the IETF Trust the rights described
+        in BCP 78 and BCP 79. All intellectual property described in this document is owned by Sanctum IP Co,
+        128 Dry Run Rd, Pine City, NY 14871. Contact: brian@sso-labs.com.
+      </t>
+    </note>
+
+  </front>
+
+  <middle>
+
+    <section anchor="introduction" numbered="true">
+      <name>Introduction</name>
+      <t>
+        OAuth 2.0 delegation frequently crosses administrative domain boundaries: an
+        enterprise identity provider delegates to a SaaS application, which delegates to an
+        integration partner, which delegates to an automation agent. Each hop is a
+        separately authorized delegation, but the security of the end-to-end access depends
+        on the integrity of the entire chain. This document defines a governance framework
+        for cross-domain delegation chains, binding the links and propagating governance
+        controls across domain boundaries.
+      </t>
+      <t>
+        This section will describe the cross-domain delegation problem, the limitations of
+        per-link authorization in multi-hop chains, and the motivation for chain-level
+        governance.
+      </t>
+    </section>
+
+    <section anchor="conventions" numbered="true">
+      <name>Conventions and Definitions</name>
+      <t>
+        The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+        "OPTIONAL" in this document are to be interpreted as described in
+        BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they
+        appear in all capitals as shown here.
+      </t>
+    </section>
+
+    <section anchor="chain-representation" numbered="true">
+      <name>Chain Representation</name>
+      <t>
+        This section will define the structure of a delegation chain: each link carries the
+        delegator's identity, the delegate's identity, the delegated scope, the domain
+        boundary crossed, and a signature binding the link to its predecessor. The chain is
+        represented as an ordered sequence of signed link records, verifiable end-to-end by
+        any party holding the root delegator's public key.
+      </t>
+    </section>
+
+    <section anchor="domain-binding" numbered="true">
+      <name>Domain Boundary Binding</name>
+      <t>
+        This section will specify how each link records the domain boundary it crosses and
+        how the domain's trust policy is referenced from the link. A link crossing into a
+        domain MUST carry a reference to that domain's applicable governance policy, so
+        that the receiving domain can verify the delegation complies with its inbound
+        delegation rules.
+      </t>
+    </section>
+
+    <section anchor="revocation" numbered="true">
+      <name>Revocation and Scope Narrowing Propagation</name>
+      <t>
+        This section will define how governance controls propagate across the chain: when a
+        link is revoked, all downstream links MUST be invalidated; when a scope is narrowed
+        at a link, downstream links MUST NOT exceed the narrowed scope. The section will
+        specify the propagation mechanism (a revocation list or status endpoint scoped to
+        the chain) and the requirements on downstream domains to check propagation status
+        before honoring a delegation.
+      </t>
+    </section>
+
+    <section anchor="security" numbered="true">
+      <name>Security Considerations</name>
+      <t>
+        This section will analyze threats to cross-domain chains: link forgery,
+        unauthorized scope expansion across a domain boundary, revocation lag, and
+        complicity of an intermediate domain. For each, the section will identify the
+        mitigation provided by the chain governance framework.
+      </t>
+    </section>
+
+    <section anchor="iana" numbered="true">
+      <name>IANA Considerations</name>
+      <t>
+        This document has no IANA actions.
+      </t>
+    </section>
+
+    <section anchor="acknowledgements" numbered="true">
+      <name>Acknowledgements</name>
+      <t>
+        The author thanks the members of the relevant IETF working groups for their
+        review and feedback. Particular thanks to colleagues at Sanctum SecOps LLC for
+        technical discussion and to the broader IETF community for continued review of
+        post-quantum migration and authorization posture work.
+      </t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+    </references>
+
+    <references title="Informative References">
+      <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml"/>
+    </references>
+  </back>
+
+</rfc>
