@@ -18,12 +18,12 @@
       <organization>Sanctum SecOps LLC</organization>
       <address>
         <postal><city>Pine City</city><region>NY</region><country>United States of America</country></postal>
-        <email>brian@sso-labs.com</email>
+        <email>bvicente@sanctumsecops.com</email>
         <uri>https://orcid.org/0009-0006-6395-5308</uri>
       </address>
     </author>
 
-    <date year="2026" month="August" day="16"/>
+    <date year="2026" month="August" day="20"/>
     <area>Security</area>
     <workgroup>OAuth</workgroup>
     <keyword>oauth</keyword>
@@ -55,7 +55,7 @@
         intends to file patent or other intellectual property rights covering subject matter described in this
         document. By posting this Internet-Draft, the author submits to the IETF Trust the rights described
         in BCP 78 and BCP 79. All intellectual property described in this document is owned by Sanctum IP Co,
-        128 Dry Run Rd, Pine City, NY 14871. Contact: brian@sso-labs.com.
+        128 Dry Run Rd, Pine City, NY 14871. Contact: bvicente@sanctumsecops.com.
       </t>
     </note>
 
@@ -66,7 +66,7 @@
     <section anchor="introduction" numbered="true">
       <name>Introduction</name>
       <t>
-        OAuth 2.0 delegation frequently crosses administrative domain boundaries: an
+        OAuth 2.0 <xref target="RFC6749"/> delegation frequently crosses administrative domain boundaries: an
         enterprise identity provider delegates to a SaaS application, which delegates to an
         integration partner, which delegates to an automation agent. Each hop is a
         separately authorized delegation, but the security of the end-to-end access depends
