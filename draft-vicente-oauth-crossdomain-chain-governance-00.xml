@@ -66,7 +66,7 @@
     <section anchor="introduction" numbered="true">
       <name>Introduction</name>
       <t>
-        OAuth 2.0 delegation frequently crosses administrative domain boundaries: an
+        OAuth 2.0 <xref target="RFC6749"/> delegation frequently crosses administrative domain boundaries: an
         enterprise identity provider delegates to a SaaS application, which delegates to an
         integration partner, which delegates to an automation agent. Each hop is a
         separately authorized delegation, but the security of the end-to-end access depends
